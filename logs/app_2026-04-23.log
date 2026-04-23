@@ -28,3 +28,8 @@
 2026-04-23 11:30:58,513 | INFO   | loggers | main.py:21 | <module>() | app started
 2026-04-23 11:30:58,514 | ERROR  | loggers | main.py:22 | <module>() | app error
 2026-04-23 11:30:58,514 | WARNING | loggers | main.py:23 | <module>() | app warning
+2026-04-23 16:22:35,545 | INFO   | loggers | generate_token.py:35 | generate_url() | https://api-t1.fyers.in/api/v3/generate-authcode?client_id=ULUN6PU6TH-100&redirect_uri=http%3A%2F%2F127.0.0.1%3A5000%2Fapi%2Fv1%2Fbroker%2Flogin&response_type=code&state=None
+2026-04-23 16:27:46,471 | INFO   | loggers | generate_token.py:47 | generate_access_token() | {'code': -5, 'message': 'invalid app id hash', 's': 'error'}
+2026-04-23 16:27:46,471 | ERROR  | loggers | generate_token.py:50 | generate_access_token() | Error:
+2026-04-23 16:30:02,641 | INFO   | loggers | generate_token.py:47 | generate_access_token() | {'code': -5, 'message': 'invalid app id hash', 's': 'error'}
+2026-04-23 16:30:02,642 | ERROR  | loggers | generate_token.py:50 | generate_access_token() | Error: {'code': -5, 'message': 'invalid app id hash', 's': 'error'}
