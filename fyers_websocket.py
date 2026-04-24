@@ -25,7 +25,8 @@ class FyersServices:
 
         if message['type'] == 'sf':
             if 'symbol' in message:
-                self.redis.append_stocks_feeds(message["symbol"], message["ltp"])
+                # self.redis.append_stocks_feeds(message["symbol"], message["ltp"])
+                self.redis.append_index_feeds(symbol="NSE:NIFTY50-INDEX", live_data=message)
             else:
                 print(message)
 
@@ -42,8 +43,8 @@ class FyersServices:
     # --- onOpen Func ---
     def onopen(self):
         data_type = "SymbolUpdate"
-
-        fyers.subscribe(symbols=nifty_symbol_list, data_type=data_type)
+        symbols = ["NSE:NIFTY50-INDEX"]
+        fyers.subscribe(symbols=symbols, data_type=data_type)
         fyers.keep_running()
 
 
