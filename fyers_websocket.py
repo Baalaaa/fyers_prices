@@ -1,7 +1,7 @@
 import os
 from fyers_apiv3.FyersWebsocket import data_ws
 
-from constants.nifty_stock_symbol import nifty_symbol_list
+from constants.nifty_stock_symbol import nifty_symbol_list, index_symbol
 from remote_redis import RedisClient
 
 
@@ -21,14 +21,23 @@ class FyersServices:
 
     # --- onMessage Func ---
     def onmessage(self, message):
-        print("Response:", message)
 
         if message['type'] == 'sf':
             if 'symbol' in message:
-                # self.redis.append_stocks_feeds(message["symbol"], message["ltp"])
-                self.redis.append_index_feeds(symbol="NSE:NIFTY50-INDEX", live_data=message)
-            else:
-                print(message)
+                sym = message['symbol']
+                symbol = sym.removeprefix('NSE:').removesuffix('-EQ')
+                print(f"Symbol: {symbol}, LTP: {message['ltp']},Open: {message['open_price']}, High: {message['high_price']},Low: {message['low_price']}, Volume: {message['vol_traded_today']}")
+                self.redis.append_live_feeds(symbol, live_quote=message)
+
+        elif message['type'] in ['cn', 'ful', 'sub']:
+            print(message)
+
+        else:
+            sym = message['symbol']
+            symbol = sym.removeprefix('NSE:').removesuffix('-EQ')
+            print(f"Symbol: {symbol}, LTP: {message['ltp']}")
+            self.redis.append_live_feeds(symbol, live_quote=message)
+
 
     # --- onError Func ---
     def onerror(self, message):
@@ -43,8 +52,9 @@ class FyersServices:
     # --- onOpen Func ---
     def onopen(self):
         data_type = "SymbolUpdate"
-        symbols = ["NSE:NIFTY50-INDEX"]
-        fyers.subscribe(symbols=symbols, data_type=data_type)
+
+        fyers.subscribe(symbols=nifty_symbol_list, data_type=data_type)
+        fyers.subscribe(symbols=index_symbol, data_type=data_type)
         fyers.keep_running()
 
 

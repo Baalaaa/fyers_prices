@@ -1,5 +1,7 @@
+import json
+from typing import List
+
 import uvicorn
-from starlette.datastructures import QueryParams
 
 from loggers import logger
 from remote_redis import RedisClient
@@ -20,78 +22,45 @@ async def root():
 
 
 # ----- Ltp API ------
-@app.get("/api/v1/stocks_ltp")
-async def get_stocks_ltp(symbol: str = Query(...)):
-    """Fetch the latest Nifty Stock LTP"""
+@app.get("/api/v1/live_feed/")
+async def get_live_feed(symbols: List[str] = Query(...)):
+    """Fetch the Latest Live Feed"""
 
     try:
-
         # --- Symbol Check ---
-        if symbol is None:
+        if symbols is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Symbol is required"
             )
 
+        result = {}
 
+        for symbol in symbols:
 
-        # --- Fetching LTP From Redis ---
-        live_feed = redis.get_stocks_feeds(symbol=symbol)
+            # --- Fetching Live Feed From Redis ---
+            live_feed = redis.get_live_feeds(symbol=symbol)
 
-        # --- LTP Check ---
-        if live_feed is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Symbol is invalid"
-            )
+            if live_feed:
+                result[symbol] = json.loads(live_feed)
+            else:
+                result[symbol] = None
+
 
         return {
             "status": "ok",
             "code": 200,
             "message": "Success",
-            "live feed": live_feed
-        }
-
-
-    except Exception as e:
-        HTTPException(status_code=500, detail=str(e))
-
-
-# ----- Ltp API ------
-@app.get("/api/v1/index_data")
-async def get_index_ltp(symbol: str = Query(...)):
-    """Fetch the latest Nifty Stock LTP"""
-
-    try:
-
-        # --- Symbol Check ---
-        if symbol is None:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Symbol is required"
-            )
-
-
-
-        # --- Fetching Feed From Redis ---
-        live_feed = redis.get_index_feeds(symbol=symbol)
-
-        # --- Feed Check ---
-        if live_feed is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Symbol is invalid"
-            )
-
-        return {
-            "status": "ok",
-            "code": 200,
-            "message": "Success",
-            "live feed": live_feed
+            "live feed": result
         }
 
     except Exception as e:
-        HTTPException(status_code=500, detail=str(e))
+        HTTPException(
+            status_code=500,
+            detail="internal server error"
+        )
+
+
 
 
 
@@ -100,4 +69,6 @@ if __name__ == '__main__':
     # --- Redis Client ---
     redis = RedisClient()
     redis.connect_remote_redis()
+
+    # ---- Fast API ---
     uvicorn.run(app, host="127.0.0.1", port=8007)
