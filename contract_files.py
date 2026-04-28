@@ -13,7 +13,7 @@ class ContractFileDownloader:
 
     # ---- Default Constructor Func  -----
     def __init__(self):
-
+        self.BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.today = pd.Timestamp.now().normalize()
         self.sensex_contract_file_url = "https://public.fyers.in/sym_details/BSE_FO.csv"
         self.cash_market_file_url = "https://public.fyers.in/sym_details/NSE_FO.csv"
@@ -34,7 +34,7 @@ class ContractFileDownloader:
         """Download the nifty contract file"""
 
         try:
-            filename = os.path.join("contract_data", "nifty_contract.csv")
+            filename = os.path.join(self.BASE_DIR, "contract_data/", "nifty_contract.csv")
             response = requests.get(self.sensex_contract_file_url)
             if response.status_code == 200:
                 df = pd.read_csv(io.StringIO(response.text))
@@ -52,7 +52,7 @@ class ContractFileDownloader:
         """Download the nifty contract file"""
 
         try:
-            filename = os.path.join("contract_data", "nifty_contract.csv")
+            filename = os.path.join(self.BASE_DIR, "contract_data/", "nifty_contract.csv")
             nifty_df = pd.read_csv(filename, names=self.csv_columns, header=None)
 
             # ---- Expiry Format ----
@@ -109,7 +109,7 @@ class ContractFileDownloader:
         """Download the sensex contract file"""
 
         try:
-            filename = os.path.join("contract_data", "sensex_contract.csv")
+            filename = os.path.join(self.BASE_DIR, "contract_data/", "sensex_contract.csv")
             response = requests.get(self.sensex_contract_file_url)
             if response.status_code == 200:
                 df = pd.read_csv(io.StringIO(response.text))
@@ -127,7 +127,7 @@ class ContractFileDownloader:
         """Download the sensex contract file"""
 
         try:
-            filename = os.path.join("contract_data", "sensex_contract.csv")
+            filename = os.path.join(self.BASE_DIR, "contract_data/", "sensex_contract.csv")
             sensex_df = pd.read_csv(filename, names=self.csv_columns, header=None)
 
             # ---- Expiry Format ----
@@ -184,7 +184,7 @@ class ContractFileDownloader:
         """Download the cash market contract file"""
 
         try:
-            filename = os.path.join("contract_data", "cash_market_contract.csv")
+            filename = os.path.join(self.BASE_DIR, "contract_data", "cash_market_contract.csv")
             response = requests.get(self.sensex_contract_file_url)
             if response.status_code == 200:
                 df = pd.read_csv(io.StringIO(response.text))
@@ -202,7 +202,7 @@ class ContractFileDownloader:
         """Download the sensex contract file"""
 
         try:
-            filename = os.path.join("contract_data", "cash_market_contract.csv")
+            filename = os.path.join(self.BASE_DIR, "contract_data", "cash_market_contract.csv")
             cm_df = pd.read_csv(filename, names=self.cash_market_columns, header=None)
 
 
