@@ -2,7 +2,7 @@ import json
 import os
 import redis
 
-from loggers import logger
+from config.loggers import logger
 from dotenv import load_dotenv
 
 

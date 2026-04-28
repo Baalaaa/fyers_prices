@@ -7,7 +7,7 @@ from logging.handlers import TimedRotatingFileHandler
 
 
 # --- LOG File &  LOG Dir ---
-LOG_DIR = "logs"
+LOG_DIR = "../logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR,f'app_{datetime.today().date().strftime("%Y-%m-%d")}.log')
 

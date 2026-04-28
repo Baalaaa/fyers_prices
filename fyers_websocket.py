@@ -1,18 +1,21 @@
 import os
+
+from config.loggers import logger
+from redis_client import RedisClient
 from fyers_apiv3.FyersWebsocket import data_ws
-
-from constants.nifty_stock_symbol import nifty_symbol_list, index_symbol
-from remote_redis import RedisClient
-
+from contract_files import ContractFileDownloader
+from constants.nifty_stock_symbol import nifty_symbol_list
 
 
 
 # --- Class FyersServices  ---
 class FyersServices:
 
-    # --- Default Constructor ---
-    def __init__(self, redis_client):
+    # --- Default Constructor Func ---
+    def __init__(self, redis_client, contract_file_dwn):
+
         self.redis = redis_client
+        self.contract_obj = contract_dwn
 
         # --- Reading Text File ---
         with open(os.path.abspath("access_token.txt"), "r") as f:
@@ -41,37 +44,45 @@ class FyersServices:
 
     # --- onError Func ---
     def onerror(self, message):
-        print("Error:", message)
+        logger.error("Error:", message)
 
 
     # --- onClose Func ---
     def onclose(message):
-        print("Connection closed:", message)
+        logger.warning("Connection closed:", message)
 
 
     # --- onOpen Func ---
     def onopen(self):
         data_type = "SymbolUpdate"
 
+        # ---- symbols ----
+        sensex_symb = self.contract_obj.fetch_sensex_current_week_expiry_contract()
+        nifty_symb = self.contract_obj.fetch_nifty_current_week_expiry_contract()
+
         fyers.subscribe(symbols=nifty_symbol_list, data_type=data_type)
-        fyers.subscribe(symbols=index_symbol, data_type=data_type)
+        fyers.subscribe(symbols=sensex_symb, data_type=data_type)
+        fyers.subscribe(symbols=nifty_symb, data_type=data_type)
         fyers.keep_running()
 
 
 
 if __name__ == '__main__':
 
-    # # ---- Redis Client ----
-    redis_client = RedisClient()
-    redis_client.connect_remote_redis()
+    # ---- Redis Client ----
+    redis_client_obj = RedisClient()
+    redis_client_obj.connect_remote_redis()
+
+    # ---- Contract Download ----
+    contract_dwn = ContractFileDownloader()
 
     # --- Fyers instance ---
-    fyers_obj = FyersServices(redis_client=redis_client)
+    fyers_obj = FyersServices(redis_client=redis_client_obj, contract_file_dwn=contract_dwn)
 
     # --- Fyers DataSocket ---
     fyers = data_ws.FyersDataSocket(
         access_token=fyers_obj.access_token,
-        log_path="",
+        log_path="fyers_logs/",
         litemode=False,
         write_to_file=False,
         reconnect=True,
@@ -81,4 +92,5 @@ if __name__ == '__main__':
         on_message=fyers_obj.onmessage
     )
 
+    # --- Connecting.... ----
     fyers.connect()

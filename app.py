@@ -2,13 +2,23 @@ import json
 from typing import List
 
 import uvicorn
-
-from loggers import logger
-from remote_redis import RedisClient
+from fastapi.middleware.cors import CORSMiddleware
+from redis_client import RedisClient
 from fastapi import FastAPI, HTTPException, status, Query
 
 # --- Flask App ---
 app = FastAPI(title="Nifty Stock API")
+
+
+# ---- CORS -----
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    max_age=600
+)
 
 
 # ---- Root API ----
@@ -29,36 +39,26 @@ async def get_live_feed(symbols: List[str] = Query(...)):
     try:
         # --- Symbol Check ---
         if symbols is None:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Symbol is required"
-            )
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Symbol is required")
 
         result = {}
-
         for symbol in symbols:
-
             # --- Fetching Live Feed From Redis ---
             live_feed = redis.get_live_feeds(symbol=symbol)
-
             if live_feed:
                 result[symbol] = json.loads(live_feed)
             else:
                 result[symbol] = None
 
-
         return {
             "status": "ok",
             "code": 200,
             "message": "Success",
-            "live feed": result
+            "live_feed": result
         }
 
     except Exception as e:
-        HTTPException(
-            status_code=500,
-            detail="internal server error"
-        )
+        HTTPException(status_code=500,detail="internal server error")
 
 
 
@@ -71,4 +71,4 @@ if __name__ == '__main__':
     redis.connect_remote_redis()
 
     # ---- Fast API ---
-    uvicorn.run(app, host="127.0.0.1", port=8007)
+    uvicorn.run(app, host="127.0.0.1", port=8007, reload=True)

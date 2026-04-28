@@ -1,6 +1,6 @@
 import os
 
-from loggers import logger
+from config.loggers import logger
 from dotenv import load_dotenv
 from fyers_apiv3 import fyersModel
 

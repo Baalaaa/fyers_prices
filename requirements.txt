@@ -4,3 +4,5 @@ fyers-apiv3===3.1.11
 colorlog===6.10.1
 fastapi===0.136.1
 uvicorn===0.46.0
+
+pandas

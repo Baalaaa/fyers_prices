@@ -2,3 +2,5 @@
 .env
 .venv
 logs/
+node_modules/
+.json
