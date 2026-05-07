@@ -36,7 +36,7 @@ class RedisClient:
             print("Connected to Redis")
 
         except Exception as e:
-            logger.error("Redis Error:", e)
+            logger.error(f"Redis Error: {e}")
 
 
     # ---- Append Live Feed Func -----
@@ -47,7 +47,7 @@ class RedisClient:
             self.r.set(symbol, json.dumps(live_quote))
 
         except Exception as e:
-            logger.error("Redis Error:", e)
+            logger.error(f"Redis Error: {e}")
 
 
     # ---- Get Live Feed ----
