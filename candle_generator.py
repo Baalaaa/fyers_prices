@@ -6,6 +6,8 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
+
+from candle_charts import create_charts
 from config.loggers import logger
 from redis_client import RedisClient
 
@@ -180,7 +182,24 @@ class CandleAggregator:
         except Exception as e:
             logger.error(f"exception occurred while flushing candle expiry: {e} !")
 
+def get_candles(r, symbol, count=20):
+    """get candles from redis """
 
+    try:
+        ikey = candle_index_key(symbol)
+
+        # ZREVRANGE() !
+        starts = r.zrevrange(ikey, 0, count -1)
+        pipe = r.pipeline()
+
+        # --- Iterating ---
+        for s in starts:
+            pipe.hgetall(candle_hash_key(symbol, s))
+
+        return pipe.execute()
+
+    except Exception as e:
+        logger.error(f"exception occurred while getting candles: {e} !")
 
 # ---- Execute Script Func ----
 def execution_script():
@@ -217,12 +236,13 @@ def execution_script():
 
 
 
-
-
-
-
-
-
-
 if __name__ == '__main__':
-    execution_script()
+
+    # execution_script()
+    redis_conn = RedisClient()
+    redis_conn.connect_remote_redis()
+    redis_data = get_candles(r=redis_conn.r , symbol="NIFTY50-INDEX")
+    # print(redis_data[0])
+
+    # --- Charts ---
+    create_charts(candles=redis_data)
