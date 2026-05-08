@@ -58,8 +58,8 @@ class RedisPublish:
 
 # -------- MAIN --------
 if __name__ == '__main__':
-    r = redis.Redis(host="redis-16193.c246.us-east-1-4.ec2.cloud.redislabs.com", port=16193,
-                    password="zzWFR4UyaYgK9AmPgwM3f7FU0RuWxM6Z", decode_responses=True)
+    r = redis.Redis(host="redis-15952.c267.us-east-1-4.ec2.cloud.redislabs.com", port=15952,
+                    password="CbHCxaZqeqPRsW0Q37GYgIDDGF7Hs8cs", decode_responses=True)
     print(r.ping())
-    fyers_obj = RedisPublish(redis_client=r, access_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZDoxIiwiZDoyIiwieDowIiwieDoxIiwieDoyIl0sImF0X2hhc2giOiJnQUFBQUFCcF9FMEV1UGI4SVBVQmhxZ01LRzg4ZzJYNjRrR0Q3aldfazNxNEUxRjUzX1FheHloMHpUU3NINjNJUkppUG45NFZIVXh1NnVRYXpZZm9waDdsNDZCQlQycGpLNFI1akt1WlpMbHl1aWVLc19ULTA4TT0iLCJkaXNwbGF5X25hbWUiOiIiLCJvbXMiOiJLMSIsImhzbV9rZXkiOiI2NjQ5Mzg1MGVjYjFhYmI0Yjc4YjliOGE2YzYzYmUxYjcxMmY5MDgxNmY5YjlhNDNjMWFhMGU1MSIsImlzRGRwaUVuYWJsZWQiOiJOIiwiaXNNdGZFbmFibGVkIjoiTiIsImZ5X2lkIjoiWEIxNDU2MCIsImFwcFR5cGUiOjEwMCwiZXhwIjoxNzc4MjAwMjAwLCJpYXQiOjE3NzgxNDI0NjgsImlzcyI6ImFwaS5meWVycy5pbiIsIm5iZiI6MTc3ODE0MjQ2OCwic3ViIjoiYWNjZXNzX3Rva2VuIn0.-BBh7Nydv7Gy95Ut11ik-n3-Bzuv4XZ7ysQT0WXuEKA")
+    fyers_obj = RedisPublish(redis_client=r, access_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZDoxIiwiZDoyIiwieDowIiwieDoxIiwieDoyIl0sImF0X2hhc2giOiJnQUFBQUFCcF9WbkpqX3Y0T3dwQk5MUjFVbDlxaTFmc3lhQ1ltNXRucVRiOWJ4VG1BTUpYckdNNFJmcXU5TGJucU9mWTVlcjdFa1p2VWJYQnRrQ0NuQmRrSC1wR2ptaWIzcGxJX2o3cTFHa3lZaDd1VVRvZy1TST0iLCJkaXNwbGF5X25hbWUiOiIiLCJvbXMiOiJLMSIsImhzbV9rZXkiOiJlZWEwOGRkMmE0ZGI1MjYwNTgyM2IyMTJkMTVhN2QyOTAxYWY2NDg1MDg5YWMyY2JmZGJmZmVlYyIsImlzRGRwaUVuYWJsZWQiOiJOIiwiaXNNdGZFbmFibGVkIjoiTiIsImZ5X2lkIjoiWEIxNDU2MCIsImFwcFR5cGUiOjEwMCwiZXhwIjoxNzc4Mjg2NjAwLCJpYXQiOjE3NzgyMTEyNzMsImlzcyI6ImFwaS5meWVycy5pbiIsIm5iZiI6MTc3ODIxMTI3Mywic3ViIjoiYWNjZXNzX3Rva2VuIn0.atWUSwp34517M7fy1ROLcAQ6D6sRfAuIwMXh8Mxt6C0")
     fyers_obj.connect()

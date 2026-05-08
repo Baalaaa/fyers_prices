@@ -238,11 +238,11 @@ def execution_script():
 
 if __name__ == '__main__':
 
-    # execution_script()
-    redis_conn = RedisClient()
-    redis_conn.connect_remote_redis()
-    redis_data = get_candles(r=redis_conn.r , symbol="NIFTY50-INDEX")
+    execution_script()
+    # redis_conn = RedisClient()
+    # redis_conn.connect_remote_redis()
+    # redis_data = get_candles(r=redis_conn.r , symbol="NIFTY50-INDEX")
     # print(redis_data[0])
 
     # --- Charts ---
-    create_charts(candles=redis_data)
+    # create_charts(candles=redis_data)
