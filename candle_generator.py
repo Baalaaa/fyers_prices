@@ -2,12 +2,10 @@ import json
 import os
 import threading
 import time
+
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
-
 from dotenv import load_dotenv
-
-from candle_charts import create_charts
 from config.loggers import logger
 from redis_client import RedisClient
 
@@ -66,10 +64,10 @@ def save_candle(r, symbol, candle):
             **candle,
         }))
 
-        print(f"[SAVED] {symbol} "
-              f"@ {datetime.fromtimestamp(candle['start'], tz=ZoneInfo('Asia/Kolkata')):%H:%M} "
-              f"O={candle['open']} H={candle['high']} "
-              f"L={candle['low']} C={candle['close']} V={candle['volume']}")
+        # print(f"[SAVED] {symbol} "
+        #       f"@ {datetime.fromtimestamp(candle['start']):%H:%M} "
+        #       f"O={candle['open']} H={candle['high']} "
+        #       f"L={candle['low']} C={candle['close']} V={candle['volume']}")
 
     except Exception as e:
         logger.error(f"exception occurred while saving candle: {e} !")

@@ -1,7 +1,21 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createChart, CrosshairMode } from "lightweight-charts";
 
 export default function LiveCandles() {
+
+  const [selectedSymbol, setSelectedSymbol] = useState("NIFTY50-INDEX");
+
+  // Symbol 
+  const symbols = ["NSE:NIFTY50-INDEX", 'NSE:ADANIENT-EQ', 'NSE:ADANIPORTS-EQ', 'NSE:APOLLOHOSP-EQ', 'NSE:ASIANPAINT-EQ', 'NSE:AXISBANK-EQ',
+                    'NSE:BAJFINANCE-EQ', 'NSE:BAJAJFINSV-EQ', 'NSE:BEL-EQ', 'NSE:BHARTIARTL-EQ', 'NSE:BPCL-EQ',
+                    'NSE:BRITANNIA-EQ', 'NSE:CIPLA-EQ', 'NSE:COALINDIA-EQ', 'NSE:DIVISLAB-EQ', 'NSE:DRREDDY-EQ',
+                    'NSE:EICHERMOT-EQ', 'NSE:GRASIM-EQ', 'NSE:HCLTECH-EQ', 'NSE:HDFCBANK-EQ', 'NSE:HDFCLIFE-EQ',
+                    'NSE:HEROMOTOCO-EQ', 'NSE:HINDALCO-EQ', 'NSE:HINDUNILVR-EQ', 'NSE:ICICIBANK-EQ', 'NSE:INDUSINDBK-EQ',
+                    'NSE:INFY-EQ', 'NSE:ITC-EQ', 'NSE:JSWSTEEL-EQ', 'NSE:KOTAKBANK-EQ', 'NSE:LT-EQ','NSE:M&M-EQ',
+                    'NSE:MARUTI-EQ', 'NSE:NESTLEIND-EQ', 'NSE:NTPC-EQ', 'NSE:ONGC-EQ','NSE:POWERGRID-EQ',
+                    'NSE:RELIANCE-EQ', 'NSE:SBILIFE-EQ', 'NSE:SBIN-EQ', 'NSE:SHRIRAMFIN-EQ', 'NSE:SIEMENS-EQ',
+                    'NSE:SUNPHARMA-EQ', 'NSE:TATACONSUM-EQ', 'NSE:TATASTEEL-EQ', 'NSE:TCS-EQ',
+                    'NSE:TECHM-EQ', 'NSE:TITAN-EQ', 'NSE:ULTRACEMCO-EQ', 'NSE:WIPRO-EQ']
 
   const chartContainerRef = useRef();
 
@@ -69,7 +83,7 @@ export default function LiveCandles() {
 
     // ---- WebSocket ----
     const ws = new WebSocket(
-      "ws://localhost:8009/ws/NIFTY50-INDEX"
+      `ws://localhost:8009/ws/${selectedSymbol}`
     );
 
     ws.onopen = () => {
@@ -85,13 +99,32 @@ export default function LiveCandles() {
     // =========================
     if (message.type === "history") {
 
-      console.log("HISTORY:", message);
+      // Current Timestamp
+      const now = new Date();
 
-      candleSeries.setData(message.data);
+      // MarketStart Time
+      const MarketStart = new Date();
+      MarketStart.setHours(9, 15, 0 , 0);
 
+      // MarketEnd Time
+      const MarketEnd = new Date();
+      MarketEnd.setHours(15, 30, 0, 0);
+
+      // startTs & endTs
+      const startTs = Math.floor(MarketStart.getTime()/ 1000);
+      const endTs = Math.floor(MarketEnd.getTime()/ 1000);
+      
+      // filtering data
+      const todayCandles = message.data.filter((candle)=>{
+          const t = Number(candle.time);
+          return t >= startTs && t <= endTs;
+      })
+
+      candleSeries.setData(todayCandles);
       chart.timeScale().fitContent();
 
       return;
+
     }
 
     // =========================
@@ -151,7 +184,7 @@ export default function LiveCandles() {
       );
     };
 
-  }, []);
+  }, [selectedSymbol]);
 
   return (
 
@@ -199,9 +232,29 @@ export default function LiveCandles() {
             marginBottom: "20px",
           }}
         >
-          NIFTY50 Live Chart
+         {selectedSymbol} Live Chart
         </div>
-
+          <select
+            value={selectedSymbol}
+            onChange={(e) =>
+              setSelectedSymbol(e.target.value)
+            }
+            style={{
+              marginBottom: "20px",
+              padding: "10px",
+              borderRadius: "8px",
+              background: "#1e293b",
+              color: "white",
+              border: "1px solid #334155",
+              fontSize: "16px",
+            }}
+          >
+            {symbols.map((symbol) => (
+              <option key={symbol} value={symbol}>
+                {symbol}
+              </option>
+            ))}
+          </select>
         <div
           ref={chartContainerRef}
           style={{

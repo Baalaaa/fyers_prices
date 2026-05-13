@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # --- Fyers instance ---
     fyers_obj = FyersServices(redis_client=redis, contract_file_dwn=contract_dwn,
-                              access_token="'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZDoxIiwiZDoyIiwieDowIiwieDoxIiwieDoyIl0sImF0X2hhc2giOiJnQUFBQUFCcC1DR0RiZlZMWWFXX2Rfd01pYllXZ0t1YUV5Rjhad3lzUVJGcDA0MWo3VEFjNTBMTXpVWUhfRk9sUTZ3c0lOdDBGU2VJMWM0YVp5Tk1WcWlWQnRDbGxZcDFqai0zb0NWQXoyUXlCM2tHMGRfQ0kxdz0iLCJkaXNwbGF5X25hbWUiOiIiLCJvbXMiOiJLMSIsImhzbV9rZXkiOiI3ODgyZGY5NDAyYmEyYjRkNjBmM2E3NzExYmMxNDM0NzM1MmExMDBlN2QyOWUyMzFiMjE5YWExNCIsImlzRGRwaUVuYWJsZWQiOiJOIiwiaXNNdGZFbmFibGVkIjoiTiIsImZ5X2lkIjoiWEIxNDU2MCIsImFwcFR5cGUiOjEwMCwiZXhwIjoxNzc3OTQxMDAwLCJpYXQiOjE3Nzc4NjkxODcsImlzcyI6ImFwaS5meWVycy5pbiIsIm5iZiI6MTc3Nzg2OTE4Nywic3ViIjoiYWNjZXNzX3Rva2VuIn0.GNTs8GZpxOBtjz7uP5XGRCSUnERNxoQdftaHgcHpSN0")
+                              access_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZDoxIiwiZDoyIiwieDowIiwieDoxIiwieDoyIl0sImF0X2hhc2giOiJnQUFBQUFCcUFfQ3lTdWdTRDJtWlFjLUk3amROcVNqbHVJLW1yTHRsaFBSTGdhUTdxRXJib19NX0x6cWdneHhld2o4Nk9KYWdHa2VFZ3FxTFhqZjBteXJELVhGV1BxRlBMRHAtQ3VwWlRJYWxfUVBFVkNrS1R1Zz0iLCJkaXNwbGF5X25hbWUiOiIiLCJvbXMiOiJLMSIsImhzbV9rZXkiOiJlMmUzNTU5ZGE5ZTdjMTI4NjcyM2VmNTJkNjA5MDcwNjZjODUyZTVhNTc5MTUyMzBlOGJmMmU0ZSIsImlzRGRwaUVuYWJsZWQiOiJOIiwiaXNNdGZFbmFibGVkIjoiTiIsImZ5X2lkIjoiWEIxNDU2MCIsImFwcFR5cGUiOjEwMCwiZXhwIjoxNzc4NzE4NjAwLCJpYXQiOjE3Nzg2NDMxMjIsImlzcyI6ImFwaS5meWVycy5pbiIsIm5iZiI6MTc3ODY0MzEyMiwic3ViIjoiYWNjZXNzX3Rva2VuIn0.GiUDuYDWe_zRm3NOrvabrvMr5Oy7nkERRDGghvYso8w")
 
     # --- Connecting.... ----
     fyers_obj.connect()
